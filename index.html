@@ -63,7 +63,7 @@
         var scene = null;
         var sceneToRender = null;
         var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
-        var createScene = function () {
+        var createScene = async function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
 
@@ -76,7 +76,7 @@
     var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
 
     // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 1.7;
+    light.intensity = 0.7;
 
     // Our built-in 'ground' shape.
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
@@ -89,6 +89,13 @@
     BABYLON.ImportMeshAsync(Assets.meshes.Yeti.rootUrl + Assets.meshes.Yeti.filename, scene).then(function({meshes}){
         meshes[0].scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
     });
+    
+    const xr = await scene.createDefaultXRExperienceAsync({
+        // ask for an ar-session
+        uiOptions: {
+          sessionMode: "immersive-ar",
+        },
+      });
 
     return scene;
 };
@@ -124,3 +131,4 @@
         </script>
     </body>
 </html>
+
